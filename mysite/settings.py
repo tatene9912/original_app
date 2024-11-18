@@ -27,6 +27,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'GOODstime.apps.GoodstimeConfig',
+    'accounts.apps.AccountsConfig',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django_bootstrap5',
+    'import_export', 
 ]
 
 MIDDLEWARE = [
@@ -37,14 +44,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
+SITE_ID = 1
+
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'GOODstime/templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -57,8 +67,34 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', #デフォルトの認証基盤 
+    'allauth.account.auth_backends.AuthenticationBackend' # メールアドレスとパスワードの両方を用いて認証するために必要
+)
+
+LOGIN_URL = 'account_login' # ログインURLの設定
+LOGIN_REDIRECT_URL = 'GOODstime:top' # ログイン後のリダイレクト先
+ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login' #　ログアウト後のリダイレクト先
+
+AUTH_USER_MODEL = "accounts.User" # カスタムユーザーを認証用ユーザーとして登録
+# Allauthの設定
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # usernameフィールドを無効化
+ACCOUNT_USERNAME_REQUIRED = False  # usernameを不要にする
+ACCOUNT_EMAIL_REQUIRED = True  # emailを必須にする
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # emailで認証する
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True  # パスワード確認フィールドを使用する場合
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # メール検証を必須とする
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_FORMS = {
+    'signup': 'accounts.forms.CustomSignupForm',
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
