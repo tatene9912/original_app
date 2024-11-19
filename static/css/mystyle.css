@@ -1,0 +1,340 @@
+html, body {
+    height: 100%; /* ページ全体を100%の高さに */
+    margin: 0; /* 余白をなくす */
+    padding: 0;
+}
+
+#wrapper {
+    display: flex;
+    flex-direction: column; /* 縦方向のレイアウト */
+    min-height: 100vh; /* ビューポートの高さに合わせる */
+}
+
+main {
+    flex-grow: 1; /* メインコンテンツが空白を埋める */
+}
+
+a {
+    text-decoration: none;
+}
+
+.text-limit{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tags {
+    display: flex;
+    gap: 1px;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #fff;
+    background-color: #d321f7;
+    border-radius: 12px;
+}
+
+.post-header h1 {
+    margin-bottom: 8px;
+    font-size: 24px;
+}
+
+.nickname {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.detail-img {
+    width: 50%;  /* 幅を50%に設定 */
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+
+.post-details {
+    margin-top: 20px;
+}
+
+.post-details .description {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.detail-list {
+    list-style: none;
+    padding: 0;
+}
+
+.detail-list li {
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.detail-list li strong {
+    font-weight: bold;
+    color: #333;
+}
+/* 全体のスタイル */
+.my-div-style {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* 上下に余白を追加 */
+}
+
+/* 検索フォームのスタイル */
+.search-bar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.search-bar,
+.sort-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input,
+.sort-form select,
+.sort-form input[type="submit"] {
+    margin-right: 10px; /* 各フォーム要素間に間隔を追加 */
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 400px;
+}
+
+.sort-form select {
+    padding: 8px;
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 250px;
+    margin-right: 10px;
+}
+
+.search-bar button {
+    padding: 8px 16px;
+    background-color: #d501ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #c85fdd;
+}
+
+/* 並び替えフォームのスタイル */
+.sort-form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sort-form select {
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.sort-form input[type="submit"] {
+    padding: 8px 16px;
+    background-color: #d501ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.sort-form input[type="submit"]:hover {
+    background-color: #c85fdd;
+}
+
+/* 投稿リストのスタイル */
+.post-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* 各投稿のスタイル */
+.post-item {
+    position: relative; /* 編集リンクが絶対位置で配置される基準となる */
+    margin-bottom: 20px; /* 投稿の下部に余白を追加 */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.post-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 画像スタイル */
+.post-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 200px;
+}
+
+/* 投稿タイトルのスタイル */
+.post-title {
+    padding: 10px;
+    background-color: #f8f9fa;
+    font-size: 1.2em;
+    margin: 0;
+    text-align: center;
+}
+
+/* 投稿内容のスタイル */
+.post-description {
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.character-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;  /* 背景色 */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.character-info p {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+}
+
+/* 編集リンクのスタイル */
+.edit-link {
+    position: absolute;
+    top: 10px; 
+    right: 10px; 
+    background-color: #d501ff;
+    color: white;
+    padding: 5px 10px; 
+    border-radius: 5px; 
+    text-decoration: none; 
+    font-weight: bold; 
+    transition: background-color 0.3s ease; 
+}
+
+.edit-link:hover {
+    background-color: #c85fdd; 
+}
+
+
+/* ページネーション */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    color: #d501ff;
+    text-decoration: none;
+    padding: 8px 16px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #d501ff;
+    color: white;
+}
+
+.pagination .page-link:hover {
+    background-color: #c85fdd;
+    color: white;
+}
+
+/* マイページ全体のスタイル */
+.MyPage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* 個々のリンクスタイル */
+.select {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    background-color: #d501ff;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* リンクホバー時の効果 */
+.select:hover {
+    background-color: #c85fdd;
+    transform: translateY(-2px);
+}
+
+/* リンクがクリックされたときの効果 */
+.select:active {
+    transform: translateY(0);
+}
+
+/* タイトルスタイル */
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* フレックスボックスで中央揃え */
+.my-div-style {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+

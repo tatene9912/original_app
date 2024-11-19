@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.conf import settings
+from django.urls import reverse
 
 transaction_CHOICES = [
     (1, '交換'),
@@ -23,7 +24,7 @@ class Post(models.Model):
     price = models.IntegerField(verbose_name='価格')
     type_transaction = models.PositiveIntegerField(verbose_name='交換or譲渡',choices=transaction_CHOICES)
     type_transfer = models.PositiveIntegerField(verbose_name='郵送or手渡し',choices=transfer_CHOICES)
-    match_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='マッチングユーザー', related_name='match_posts',null=True)
+    match_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='マッチングユーザー', related_name='match_posts',null=True, blank=True)
     image1 = models.ImageField(verbose_name='画像1')
     image2 = models.ImageField(verbose_name='画像2', blank=True)
     image3 = models.ImageField(verbose_name='画像3', blank=True)
@@ -31,7 +32,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.user.nic_name}"
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='会員名', null=True)

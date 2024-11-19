@@ -49,6 +49,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=False
     )
+    image = models.ImageField(
+        verbose_name='アイコン',
+        null=True,
+        blank=True,
+        default='noImage.png'
+    )
     name = models.CharField(
         verbose_name=_("氏名"),
         max_length=150,

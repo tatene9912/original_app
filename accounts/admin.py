@@ -4,6 +4,7 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 from import_export.resources import ModelResource
+from django.utils.safestring import mark_safe
 
 class UserResource(ModelResource):
     email = Field(attribute='email', column_name='email')
@@ -17,6 +18,9 @@ class UserResource(ModelResource):
     is_staff = Field(attribute='is_staff', column_name='is_staff')
     is_active = Field(attribute='is_active', column_name='is_active')
 
+    def image(self, obj):
+        return mark_safe('<img src="{}" style="width:100px; height:auto;">'.format(obj.image.url))
+
     class Meta:
         model = User
         skip_unchanged = True
@@ -26,7 +30,13 @@ class UserResource(ModelResource):
 @admin.register(User)
 class UserAdmin(ImportExportModelAdmin):
     ordering = ['id']
+    list_display = ('id', 'email', 'name', 'nic_name','thumbnail_image',  'profile', 'postal_code', 'address', 'phone_number', 'is_superuser', 'is_staff', 'is_active', 'created_at', 'updated_at')
     list_display = ('id', 'email', 'name', 'nic_name', 'profile', 'postal_code', 'address', 'phone_number', 'is_superuser', 'is_staff', 'is_active', 'created_at', 'updated_at')
     search_fields = ('email', 'name', )
     resource_class = UserResource
     list_filter = ['is_superuser', 'is_staff', 'is_active', ] 
+
+    def thumbnail_image(self, obj):
+        return mark_safe('<img src="{}" style="width:100px; height:auto;">'.format(obj.image.url))
+
+    thumbnail_image.short_description = 'Image'

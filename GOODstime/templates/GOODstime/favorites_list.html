@@ -1,0 +1,70 @@
+{% extends "GOODstime/base.html" %}
+
+{% load static %}
+
+{% block title %}お気に入り一覧{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="my-div-style">
+    <!-- 投稿一覧 -->
+    <div class="post-list">
+        {% if posts %}
+        {% for favorite in object_list %}
+        <div class="post-item">
+            <a class="post-link" href="{% url 'GOODstime:post_detail' favorite.post.pk %}">
+                <div class="tags mt-1 ms-1">
+                    {% if favorite.post.tag1 %}<span class="tag me-auto">#{{ favorite.post.tag1 }}</span>{% endif %}
+                    {% if favorite.post.tag2 %}<span class="tag me-auto">#{{ favorite.post.tag2 }}</span>{% endif %}
+                    {% if favorite.post.tag3 %}<span class="tag me-auto">#{{ favorite.post.tag3 }}</span>{% endif %}
+                </div>
+                <img src="{{ favorite.post.image1.url }}" class="post-image" alt="{{ post.work_name }}">
+                <h3 class="post-title">{{ favorite.post.work_name }}</h3>
+                <p class="post-description text-limit">{{ favorite.post.content|truncatewords:20 }}</p>
+                            <!-- 希望キャラ名または価格 -->
+                <div class="character-info">
+                    <p><strong>譲：</strong> {{ favorite.post.give_character }}</p>
+                    <p><strong>求：</strong>
+                        {% if favorite.post.type_transaction == 1 %}
+                            {{ favorite.post.want_character }}  <!-- 交換の場合 -->
+                        {% else %}
+                            ¥{{ favorite.post.price }}  <!-- 譲渡の場合 -->
+                        {% endif %}
+                    </p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>まだお気に入りがありません。</p>
+    {% endif %}
+
+    <!-- ページネーション -->
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active"><a class="page-link" href="#!">{{ num }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

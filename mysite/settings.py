@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'django_bootstrap5',
     'import_export', 
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,9 @@ SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'GOODstime/templates'], 
+        'DIRS': [
+            BASE_DIR / 'templates',
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,6 +69,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
@@ -146,6 +150,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media_local'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -19,21 +19,22 @@
         {% block head %}{% endblock %}
     </head>
     <body>
-        <div id="wrapper">
+        <div id="wrapper" class="d-flex flex-column min-vh-100">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'GOODstime:index' %}">Have a GOODs Time</a>
+                <a class="navbar-brand" href="{% url 'GOODstime:top' %}">Have a <span style="color: #d321f7;" class="fw-bold fst-italic">GOODs</span> Time</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         {% if not user.is_authenticated %}
                         {% else %}
-                        <li class="nav-item">おかえりなさい！ {{ user.name }} さん</li>
+                        <li class="nav-item">おかえりなさい！ {{ user.nic_name }} さん</li>
                         {% endif %}
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'GOODstime:myPage' %}">マイページ</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Log Out</a></li>
                         {% else %}
                         <li class="nav-item"><a class="nav-link {% block active_signup %}{% endblock %}" href="{% url 'account_signup' %}">新規登録</a></li>
@@ -47,9 +48,9 @@
         <div>
             {% for message in messages %}
             {% if message.tags == "error" %}
-                <div class="my-div-style alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {% else %}
-                <div class="my-div-style alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
             {% endif %}
                 {{message}}
                 <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
@@ -60,7 +61,9 @@
 
     {% block header%}{% endblock %}
 
-    {% block contents%}{% endblock %}
+    <main class="flex-grow-1">
+        {% block contents%}{% endblock %}
+    </main>
 
         <!-- Footer-->
         <footer class="py-5 bg-dark">

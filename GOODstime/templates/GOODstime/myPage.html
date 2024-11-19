@@ -1,0 +1,22 @@
+{% extends "GOODstime/base.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block title %}マイページ{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="my-div-style text-center">
+    <h1>{{ user.nic_name }}さんのマイページ</h1>
+    <div class="MyPage">
+        <a class="select mb-4" href="{% url 'GOODstime:edit_profile' %}">プロフィールの編集</a>
+        <a class="select mb-4" href="{% url 'GOODstime:profile' %}">プロフィールの表示</a>
+        <a class="select mb-4" href="{% url 'GOODstime:favorites_list' %}">お気に入り一覧</a>
+        <a class="select mb-4" href="{% url 'GOODstime:my_post_list' %}">投稿一覧</a>
+        <a class="select mb-4" href="{% url 'account_reset_password' %}">パスワードの変更</a>
+    </div>
+</div>
+{% endblock %}
