@@ -10,6 +10,10 @@ html, body {
     min-height: 100vh; /* ビューポートの高さに合わせる */
 }
 
+.my-div-style{
+    margin-top: 5rem !important;
+}
+
 main {
     flex-grow: 1; /* メインコンテンツが空白を埋める */
 }
@@ -94,85 +98,85 @@ a {
     color: #333;
 }
 /* 全体のスタイル */
-.my-div-style {
+.my-div-style2 {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
+/* コンテナ全体 */
 .form-container {
+    margin: 20px auto;
+    padding: 10px;
+    width: 90%;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* 上部エリアの並び */
+.form-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px; /* 上下に余白を追加 */
+    gap: 10px; /* 各フォーム間のスペース */
+    flex-wrap: wrap; /* ウィンドウ幅に応じて折り返し */
 }
 
-/* 検索フォームのスタイル */
-.search-bar {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.search-bar,
+/* 各フォーム */
+.search-form,
+.filter-form,
 .sort-form {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    gap: 5px; /* 入力とボタンのスペース */
 }
 
-.search-bar input,
-.sort-form select,
-.sort-form input[type="submit"] {
-    margin-right: 10px; /* 各フォーム要素間に間隔を追加 */
-}
-
-.search-bar input {
+/* 入力ボックス */
+input[type="text"],
+select {
     padding: 8px;
-    width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 180px;
+    font-size: 14px;
 }
 
-.sort-form select {
-    padding: 8px;
-}
-
-.search-bar input {
-    padding: 8px;
-    width: 250px;
-    margin-right: 10px;
-}
-
-.search-bar button {
-    padding: 8px 16px;
-    background-color: #d501ff;
-    color: #fff;
+/* ボタン共通スタイル */
+button {
+    padding: 8px 12px;
     border: none;
-    cursor: pointer;
-}
-
-.search-bar button:hover {
-    background-color: #c85fdd;
-}
-
-/* 並び替えフォームのスタイル */
-.sort-form {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.sort-form select {
-    padding: 8px;
-    margin-right: 10px;
-}
-
-.sort-form input[type="submit"] {
-    padding: 8px 16px;
-    background-color: #d501ff;
+    border-radius: 4px;
+    font-size: 14px;
     color: #fff;
-    border: none;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.sort-form input[type="submit"]:hover {
-    background-color: #c85fdd;
+/* 検索ボタン */
+.btn-search {
+    background-color: rgb(59, 30, 135);
 }
+.btn-search:hover {
+    background-color: rgba(60, 30, 135, 0.775);
+}
+
+/* フィルターボタン */
+.btn-filter {
+    background-color: rgb(112, 87, 163);
+}
+.btn-filter:hover {
+    background-color: rgba(112, 87, 163, 0.823);
+}
+
+/* 並び替えボタン */
+.btn-sort {
+    background-color: rgb(139, 155, 206);
+}
+.btn-sort:hover {
+    background-color: rgba(139, 155, 206, 0.748);
+}
+
 
 /* 投稿リストのスタイル */
 .post-list {
@@ -226,35 +230,126 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f9f9f9;  /* 背景色 */
+    background-color: #f9f9f9; 
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin-top: 10px;
 }
 
+/* コメント表示 */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+}
+
+.chat-message-right {
+    flex-direction: row-reverse;
+}
+
+.chat-avatar {
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.chat-message-right .chat-avatar {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.chat-bubble {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.chat-message-left .chat-bubble {
+    background-color: #d286e1;
+    border-top-left-radius: 0;
+}
+
+.chat-message-right .chat-bubble {
+    background-color: #d286e1;
+    color: white;
+    border-top-right-radius: 0;
+}
+
+.chat-meta {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    color: white;
+}
+
+
 .character-info p {
     font-size: 16px;
-    color: #333;
+    color: #555;
     margin: 0;
+}
+
+.chat-text {
+    color: white;
+}
+
+.btn-request {
+    margin-top: 20px;
+    background-color: rgb(59, 30, 135);
+}
+.btn-request:hover {
+    background-color: rgba(60, 30, 135, 0.738);
 }
 
 /* 編集リンクのスタイル */
 .edit-link {
-    position: absolute;
-    top: 10px; 
-    right: 10px; 
-    background-color: #d501ff;
-    color: white;
-    padding: 5px 10px; 
-    border-radius: 5px; 
-    text-decoration: none; 
-    font-weight: bold; 
-    transition: background-color 0.3s ease; 
+    margin-right: 1px;  /* 編集リンクと削除ボタンの間隔調整 */
 }
 
-.edit-link:hover {
-    background-color: #c85fdd; 
+.title-container {
+    display: flex;           
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 10px;      
+}
+
+.triangle {
+    position: relative;
+    display: inline-block;
+    width: 33px;
+    height: 62px;
+}
+.triangle::before,
+.triangle::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 2px);
+    right: 0;
+    width: 15px;
+    height: 4px;
+    border-radius: 9999px;
+    background-color: #929292;
+    transform-origin: calc(100% - 2px) 50%;
+}
+.triangle::before {
+    transform: rotate(45deg);
+}
+.triangle::after {
+    transform: rotate(-45deg);
 }
 
 
@@ -330,7 +425,7 @@ h1 {
 }
 
 /* フレックスボックスで中央揃え */
-.my-div-style {
+.my-div-style3 {
     display: flex;
     justify-content: flex-start;
     align-items: center;

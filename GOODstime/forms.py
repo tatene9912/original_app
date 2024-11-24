@@ -1,11 +1,20 @@
 from django import forms
-from GOODstime.models import Favorite, Post
+from GOODstime.models import Comment, Favorite, Post, Message
 from accounts.models import User
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('work_name', 'content', 'tag1', 'tag2', 'tag3', 'give_character', 'want_character', 'price', 'type_transaction', 'type_transfer', 'image1', 'image2', 'image3')
+
+        widgets = {
+            'work_name':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
+            'tag1':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
+            'tag2':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
+            'tag3':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
+            'give_character':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
+            'want_character':forms.Textarea(attrs={'cols': '50', 'rows': '1'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,8 +32,39 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = ('email', 'nic_name', 'image', 'name', 'profile', 'postal_code', 'address', 'phone_number')
 
+        widgets = {
+            'nic_name':forms.Textarea(attrs={'cols': '50', 'rows': '1', 'placeholder': 'サムライ'}),
+            'name':forms.Textarea(attrs={'cols': '50', 'rows': '1', 'placeholder': '侍　花子'}),
+            'postal_code':forms.Textarea(attrs={'cols': '50', 'rows': '1', 'placeholder': '5555555(ハイフンなし)'}),
+            'address':forms.Textarea(attrs={'cols': '50', 'rows': '1', 'placeholder': '東京都千代田区霞が関…'}),
+            'phone_number':forms.Textarea(attrs={'cols': '50', 'rows': '1', 'placeholder': '09011112222(ハイフンなし)'}),
+            'email':forms.Textarea(attrs={'cols': '50', 'rows': '1', 'placeholder': 'test@example.com'}),
+        }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # formにCSSをあてる
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'コメントを入力してください...'}),
+        }
+        labels = {
+            'content': '',  # ラベルを非表示にする
+        }
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 1, 'placeholder': '何か入力してください...'}),
+        }
+        labels = {
+            'content': '',  # ラベルを非表示にする
+        }

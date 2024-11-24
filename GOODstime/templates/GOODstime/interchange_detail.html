@@ -1,0 +1,77 @@
+{% extends "GOODstime/base.html" %}
+{% load custom_filters %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}取引詳細{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="my-div-style">
+    <div class="post-detail-container mt-3 mb-4">
+        <!-- 作品名と画像 -->
+        <div class="post-header">
+            <h1 class="text-center">{{ post.work_name }}</h1>
+            <p class="nickname text-center">投稿者: <a href="{% url 'GOODstime:user_profile' pk=post.user.pk %}">{{ post.user.nic_name }}</a></p>
+    
+        <!-- 投稿の詳細情報 -->
+        <div class="post-details text-center">
+            <ul class="detail-list">
+                <li><strong>求：</strong> 
+                    {% if post.type_transaction == 1 %}
+                    {{ post.want_character }}
+                    {% else %}
+                    ¥{{ post.price|intcomma }}
+                    {% endif %}
+                </li>
+                <li><strong>譲：</strong> {{ post.give_character|default:"なし" }}</li>
+                <li><strong>取引方法:</strong> {{ post.get_type_transaction_display }}</li>
+                <li><strong>受け渡し方法:</strong> {{ post.get_type_transfer_display }}</li>
+            </ul>
+        </div>
+    
+        <h3 class="text-center mb-4">メッセージ</h3>
+        <div class="chat-container mt-4">
+            {% for message in post.messages.all %}
+            <div class="chat-message {% if message.user == request.user %}chat-message-right{% else %}chat-message-left{% endif %}">
+                <div class="chat-avatar">
+                    {% if message.user.image %}
+                    <img src="{{ message.user.image.url }}" alt="{{ message.user.nic_name }}" class="avatar-img">
+                    {% endif %}
+                </div>
+                <div class="chat-bubble">
+                    <p class="chat-text">{{ message.content }}</p>
+                    <span class="chat-meta">{{ message.user.nic_name }} • {{ message.created_at|date:"Y/m/d H:i" }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    
+        <div class="comment-section mt-5">
+            <!-- メッセージ投稿フォーム -->
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'GOODstime:interchange_detail' pk=post.id %}" class="text-center">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ message_form.content }}  <!-- フィールドのみを表示 -->
+                </div>
+                <button type="submit" name="message_submit" class="btn btn-primary mt-2">送信する</button>
+            </form>
+            {% endif %}
+            
+        </div>
+        <form class="text-center mt-4" method="post" action="{% url 'GOODstime:interchange_detail' pk=post.pk %}">
+            {% csrf_token %}
+            <button type="submit" name="cancel_transaction" class="btn btn-danger"
+                onclick="return confirm('本当に取引をキャンセルしますか？');">
+                この取引をキャンセルする
+            </button>
+        </form>
+    
+    </div>
+</div>
+
+
+{% endblock %}

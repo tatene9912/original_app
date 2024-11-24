@@ -1,5 +1,5 @@
 {% extends "GOODstime/base.html" %}
-
+{% load custom_filters %}
 {% load static %}
 {% load humanize %}
 
@@ -9,92 +9,162 @@
 {% endblock %}
 
 {% block contents %}
-<div class="post-detail-container mt-3 mb-4">
-    <!-- タグ部分 -->
-    <div class="tags">
-        {% if post.tag1 %}
-            <a href="{% url 'GOODstime:tag_search' tag=post.tag1 %}"><span class="tag">#{{ post.tag1 }}</span></a>
-        {% endif %}
-        {% if post.tag2 %}
-            <a href="{% url 'GOODstime:tag_search' tag=post.tag2 %}"><span class="tag">#{{ post.tag2 }}</span></a>
-        {% endif %}
-        {% if post.tag3 %}
-            <a href="{% url 'GOODstime:tag_search' tag=post.tag3 %}"><span class="tag">#{{ post.tag3 }}</span></a>
-        {% endif %}
-    </div>
-
-    <!-- 作品名と画像 -->
-    <div class="post-header text-center">
-        <h1>{{ post.work_name }}</h1>
-        <p class="nickname">投稿者: <a href="{% url 'GOODstime:profile_detail' pk=post.user.pk %}">{{ post.user.nic_name }}</a></p>
-        
-        <!-- 画像カルーセル -->
-        {% if post.image1 or post.image2 or post.image3 %}
-        <div id="postImagesCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                {% if post.image1 %}
-                <div class="carousel-item active">
-                    <img src="{{ post.image1.url }}" class="d-block w-100" alt="投稿画像">
-                </div>
+<div class="my-div-style">
+    <div class="post-detail-container mt-3 mb-4">
+        <div class="d-flex justify-content-between">
+            <!-- タグ部分 -->
+            <div class="tags">
+                {% if post.tag1 %}
+                    <a href="{% url 'GOODstime:tag_search' tag=post.tag1 %}"><span class="tag">#{{ post.tag1 }}</span></a>
                 {% endif %}
-                {% if post.image2 %}
-                <div class="carousel-item">
-                    <img src="{{ post.image2.url }}" class="d-block w-100" alt="投稿画像">
-                </div>
+                {% if post.tag2 %}
+                    <a href="{% url 'GOODstime:tag_search' tag=post.tag2 %}"><span class="tag">#{{ post.tag2 }}</span></a>
                 {% endif %}
-                {% if post.image3 %}
-                <div class="carousel-item">
-                    <img src="{{ post.image3.url }}" class="d-block w-100" alt="投稿画像">
-                </div>
+                {% if post.tag3 %}
+                    <a href="{% url 'GOODstime:tag_search' tag=post.tag3 %}"><span class="tag">#{{ post.tag3 }}</span></a>
                 {% endif %}
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#postImagesCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#postImagesCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+            <!-- いいね数 -->
+            <div><p><span class="text-danger">♥</span>{{ favorite_count }}</p></div>
         </div>
+    
+    
+        <!-- 作品名と画像 -->
+        <div class="post-header text-center">
+            <h1>{{ post.work_name }}</h1>
+            <p class="nickname">投稿者: <a href="{% url 'GOODstime:user_profile' pk=post.user.pk %}">{{ post.user.nic_name }}</a></p>
+            
+            <!-- 画像カルーセル -->
+            {% if post.image1 or post.image2 or post.image3 %}
+            <div id="postImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% if post.image1 %}
+                    <div class="carousel-item active">
+                        <img src="{{ post.image1.url }}" class="d-block w-100" alt="投稿画像">
+                    </div>
+                    {% endif %}
+                    {% if post.image2 %}
+                    <div class="carousel-item">
+                        <img src="{{ post.image2.url }}" class="d-block w-100" alt="投稿画像">
+                    </div>
+                    {% endif %}
+                    {% if post.image3 %}
+                    <div class="carousel-item">
+                        <img src="{{ post.image3.url }}" class="d-block w-100" alt="投稿画像">
+                    </div>
+                    {% endif %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#postImagesCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#postImagesCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    
+        <!-- 投稿の詳細情報 -->
+        <div class="post-details text-center">
+            <p class="description">{{ post.content|linebreaksbr }}</p>
+            <ul class="detail-list">
+                <li><strong>求：</strong> 
+                    {% if post.type_transaction == 1 %}
+                    {{ post.want_character }}
+                    {% else %}
+                    ¥{{ post.price|intcomma }}
+                    {% endif %}
+                </li>
+                <li><strong>譲：</strong> {{ post.give_character|default:"なし" }}</li>
+                <li><strong>取引方法:</strong> {{ post.get_type_transaction_display }}</li>
+                <li><strong>受け渡し方法:</strong> {{ post.get_type_transfer_display }}</li>
+            </ul>
+        </div>
+    
+        {% if user.is_authenticated %}
+        {% if is_favorite and favorite %}
+            <form method="post" action="{% url 'GOODstime:remove_favorite' pk=favorite.pk %}" class="text-center">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary text-white w-50 fw-bold">★ お気に入り解除</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'GOODstime:add_favorite' post.id %}" class="text-center">
+                {% csrf_token %}
+                <button class="btn btn-warning text-white w-50 fw-bold" type="submit">★ お気に入りに追加</button>
+            </form>
         {% endif %}
-    </div>
-
-    <!-- 投稿の詳細情報 -->
-    <div class="post-details text-center">
-        <p class="description">{{ post.content|linebreaksbr }}</p>
-        <ul class="detail-list">
-            <li><strong>求：</strong> 
-                {% if post.type_transaction == 1 %}
-                {{ post.want_character }}
-                {% else %}
-                ¥{{ post.price|intcomma }}
-                {% endif %}
-            </li>
-            <li><strong>譲：</strong> {{ post.give_character|default:"なし" }}</li>
-            <li><strong>取引方法:</strong> {{ post.get_type_transaction_display }}</li>
-            <li><strong>受け渡し方法:</strong> {{ post.get_type_transfer_display }}</li>
-        </ul>
-    </div>
-
-    {% if user.is_authenticated %}
-    {% if is_favorite and favorite %}
-        <form method="post" action="{% url 'GOODstime:remove_favorite' pk=favorite.pk %}" class="text-center">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary text-white w-50 fw-bold">★ お気に入り解除</button>
-        </form>
-    {% else %}
-        <form method="post" action="{% url 'GOODstime:add_favorite' post.id %}" class="text-center">
-            {% csrf_token %}
-            <button class="btn btn-warning text-white w-50 fw-bold" type="submit">★ お気に入りに追加</button>
-        </form>
-    {% endif %}
-    {% else %}
-        <div class="text-center">
-            <a class="btn btn-primary text-white w-50" href="{% url 'account_login' %}">★ お気に入りに追加</a>
+        {% else %}
+            <div class="text-center">
+                <a class="btn btn-primary text-white w-50" href="{% url 'account_login' %}">★ お気に入りに追加</a>
+            </div>
+        {% endif %}
+    
+        <div class="chat-container mt-4">
+            <h3 class="text-center mb-4">コメント</h3>
+            {% for comment in post.comments.all %}
+            <div class="chat-message {% if comment.user == request.user %}chat-message-right{% else %}chat-message-left{% endif %}">
+                <div class="chat-avatar">
+                    {% if comment.user.image %}
+                    <img src="{{ comment.user.image.url }}" alt="{{ comment.user.nic_name }}" class="avatar-img">
+                    {% endif %}
+                </div>
+                <div class="chat-bubble">
+                    <p class="chat-text">{{ comment.content }}</p>
+                    <span class="chat-meta">{{ comment.user.nic_name }} • {{ comment.created_at|date:"Y/m/d H:i" }}</span>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-    {% endif %}
-
+    
+        <div class="comment-section mt-5">        
+            <!-- コメント投稿フォーム -->
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'GOODstime:post_detail' pk=post.id %}" class="text-center">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ comment_form.content }}  <!-- フィールドのみを表示 -->
+                </div>
+                <button type="submit" name="comment_submit" class="btn btn-primary mt-2">コメントを投稿する</button>
+            </form>
+            
+            
+            {% else %}
+            <p class="text-center">
+                コメントを投稿するには <a href="{% url 'account_login' %}">ログイン</a> してください。
+            </p>
+            {% endif %}
+            
+            {% if error_message %}
+            <div class="alert alert-danger mt-3">
+                {{ error_message }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="mt-4">
+            <!-- リクエスト送信ボタン -->
+            {% if post.user != request.user %}
+            {% if is_unmatched %}
+            {% if post.match_user != request.user %}
+            <form method="post" class="text-center" action="{% url 'GOODstime:post_detail' pk=object.pk %}">
+                {% csrf_token %}
+                <button type="submit" name="request_match" class="btn-request">リクエストを送る</button>
+            </form>
+            {% else %}
+            <p class="text-center">リクエスト送信済み</p>
+            {% endif %}
+            {% else %}
+            <p class="text-center">この投稿はすでに取引成立済みです。</p>
+            {% endif %}
+            {% else %}
+            {% endif %}
+        </div>
+        
+    
+    </div>
 </div>
+
 
 {% endblock %}

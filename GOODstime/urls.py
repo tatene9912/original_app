@@ -16,6 +16,11 @@ urlpatterns = [
     path('favorite_list/', views.FavoriteListView.as_view(), name="favorites_list"),
     path('mypage/', views.MyPage.as_view(), name="myPage"),
     path('edit_profile/', views.edit_profile, name="edit_profile"),
-    path('profile_detail/<int:pk>/', views.ProfileView.as_view(), name='profile_detail'),
-    path('profile_detail/', views.ProfileView.as_view(), name='profile'),
+    path('profile_detail/', views.ProfileView.as_view(), name='profile_detail'),
+    path('profile/<int:pk>/', views.UserProfileView.as_view(), name='user_profile'),
+    path('requested-posts/', views.RequestedPostListView.as_view(), name='requested_post_list'),
+    path('interchange_detail/<int:pk>', views.InterchangeDetailView.as_view(),name="interchange_detail"),
+    path('own_interchange_list/', views.OwnInterchangeListView.as_view(), name="own_interchange_list"),
+    path('another_interchange_list/', views.AnotherInterchangeListView.as_view(), name="another_interchange_list"),
+    path('interchange_detail/<int:pk>', views.InterchangeDetailView.as_view(),name="interchange_detail"),
 ]

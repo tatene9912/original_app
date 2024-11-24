@@ -82,6 +82,8 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = 'account_login' # ログインURLの設定
 LOGIN_REDIRECT_URL = 'GOODstime:top' # ログイン後のリダイレクト先
 ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login' #　ログアウト後のリダイレクト先
+# ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.CustomSignupForm'
+ACCOUNT_ADAPTER = "accounts.adapter.CustomAccountAdapter"
 
 AUTH_USER_MODEL = "accounts.User" # カスタムユーザーを認証用ユーザーとして登録
 # Allauthの設定

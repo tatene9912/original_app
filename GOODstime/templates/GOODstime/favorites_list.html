@@ -11,7 +11,7 @@
 <div class="my-div-style">
     <!-- 投稿一覧 -->
     <div class="post-list">
-        {% if posts %}
+        {% if object_list %}
         {% for favorite in object_list %}
         <div class="post-item">
             <a class="post-link" href="{% url 'GOODstime:post_detail' favorite.post.pk %}">

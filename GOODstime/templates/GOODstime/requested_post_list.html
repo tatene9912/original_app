@@ -1,0 +1,55 @@
+{% extends "GOODstime/base.html" %}
+
+{% load static %}
+
+{% block title %}リクエスト一覧{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="my-div-style">
+    <h1>リクエスト一覧</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>投稿名</th>
+                <th>キャラ名</th>
+                <th>リクエストユーザー</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in requested_posts %}
+            <tr>
+                <td><a class="post-link" href="{% url 'GOODstime:post_detail' post.pk %}">{{ post.work_name }}</a></td>
+                <td>
+                    {{ post.give_character }}⇔
+                    {% if post.type_transaction == 1 %}
+                        {{ post.want_character }}  <!-- 交換の場合 -->
+                    {% else %}
+                        ¥{{ post.price }}  <!-- 譲渡の場合 -->
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'GOODstime:user_profile' pk=post.match_user.pk %}">{{ post.match_user.nic_name }}</a></td>
+                <td>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <button type="submit" name="action" value="approve" class="btn btn-success">承認</button>
+                        <button type="submit" name="action" value="reject" class="btn btn-danger">削除</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">リクエストされた投稿がありません。</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

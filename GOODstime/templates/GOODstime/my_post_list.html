@@ -14,6 +14,18 @@
         {% if object_list %}
         {% for post in object_list %}
         <div class="post-item">
+            <div class="d-flex justify-content-end align-items-center mb-3">
+                <a class="btn btn-success edit-link" href="{% url 'GOODstime:post_update' pk=post.pk %}">編集</a>
+            
+                <!-- 削除フォーム -->
+                <form method="post" action="{% url 'GOODstime:my_post_list' %}">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_post" class="btn btn-danger ms-1" 
+                            onclick="return confirm('本当に投稿を削除しますか？');">
+                        削除
+                    </button>
+                </form>
+            </div>    
             <a class="post-link" href="{% url 'GOODstime:post_detail' pk=post.pk %}">
                 <div class="tags mt-1 ms-1">
                     {% if post.tag1 %}<span class="tag me-auto">#{{ post.tag1 }}</span>{% endif %}
@@ -35,8 +47,7 @@
                     </p>
                 </div>
             </a>
-            <!-- 編集リンクは右上に配置 -->
-            <a class="edit-link" href="{% url 'GOODstime:post_update' pk=post.pk %}">編集</a>
+                
         </div>        
         {% endfor %}
     </div>

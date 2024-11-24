@@ -1,0 +1,70 @@
+{% extends "GOODstime/base.html" %}
+
+{% load static %}
+
+{% block title %}投稿一覧{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="my-div-style text-center">
+    <!-- 投稿一覧 -->
+    <div class="my-div-style2 d-flex mt-4">
+        {% if 'own_interchange_list' in current_path %}
+        リクエストされた取引
+        {% else %}
+        <a href="{% url 'GOODstime:own_interchange_list' %}">リクエストされた取引</a>
+        {% endif %}
+        /
+        {% if 'another_interchange_list' in current_path %}
+        リクエストした取引
+        {% else %}
+        <a href="{% url 'GOODstime:another_interchange_list' %}">リクエストした取引</a>
+        {% endif %}
+    </div>
+    <table class="table table-hover mt-3">
+        {% if object_list %}
+        {% for post in object_list %}
+            <tr>
+                <td>
+                    <a class="post-link" href="{% url 'GOODstime:interchange_detail' pk=post.pk %}">
+                        <div class="title-container">
+                            {{ post.work_name }}
+                            <div class="triangle"></div>
+                        </div>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>現在取引中のものはありません。</p>
+    {% endif %}
+
+    <!-- ページネーション -->
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active"><a class="page-link" href="#!">{{ num }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
