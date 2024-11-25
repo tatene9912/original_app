@@ -3,11 +3,11 @@ from django.template import engines
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import CreateView, ListView, DetailView, TemplateView, UpdateView
-from GOODstime.models import Favorite, Post
+from GOODstime.models import Favorite, Post, Review
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from accounts.models import User
-from .forms import CommentForm, FavoriteForm, MessageForm, PostForm, ProfileForm
+from .forms import CommentForm, FavoriteForm, MessageForm, PostForm, ProfileForm, ReviewForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
@@ -105,7 +105,6 @@ class PostListView(ListView):
         filter_status = self.request.GET.get('filter_status')
         if filter_status == 'uncompleted':
             queryset = queryset.filter(status='unmatched')
-            print(f"After Filter Query Count: {queryset.count()}")
 
         # 並び替えの処理
         sort = query.get('order_by')
@@ -274,16 +273,18 @@ class MyPage(LoginRequiredMixin, TemplateView):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)  # request.FILES を追加
         if form.is_valid():
             form.save()
             messages.success(request, 'プロフィールを更新しました。')
-            return redirect('GOODstime:profile')
+            return redirect('GOODstime:myPage')
     else:
         form = ProfileForm(instance=request.user)
     return render(request, 'GOODstime/edit_profile.html', {
         'form': form,
     })
+
+
 
 class ProfileView(LoginRequiredMixin, DetailView):
     model = User
@@ -392,12 +393,26 @@ class InterchangeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
+        user = self.request.user
 
         # メッセージフォームを渡す
         context['message_form'] = MessageForm()
 
+        # レビューフォームを渡す
+        context['review_form'] = ReviewForm()
+
         # 投稿に紐付くメッセージを渡す
         context['messages_post'] = post.messages.all()
+
+        if user.is_authenticated:
+            # 評価済みかどうかを判定
+            if post.user == user:
+                target_user = post.match_user
+            else:
+                target_user = post.user
+            context['has_posted_review'] = Review.objects.filter(user=user, target_user=target_user, post=post).exists()
+        else:
+            context['has_posted_review'] = False
 
         storage = messages.get_messages(self.request)
         storage.used = True
@@ -417,7 +432,6 @@ class InterchangeDetailView(DetailView):
                 return redirect('some_error_page') 
 
             if message_form.is_valid():
-                print("Message form is valid")
                 message = message_form.save(commit=False)
                 message.post = post
                 message.user = user
@@ -428,6 +442,45 @@ class InterchangeDetailView(DetailView):
                 context = self.get_context_data(**kwargs)
                 context['message_form'] = message_form
                 context['error_message'] = message_form.errors  
+                return self.render_to_response(context)
+            
+        #評価登録
+        if 'review_submit' in request.POST:
+            review_form = ReviewForm(data=request.POST)
+            try:
+                post = Post.objects.get(id=post_id)
+            except Post.DoesNotExist:
+                return redirect('some_error_page') 
+            
+            # ログイン中のユーザーが投稿者かどうかで target_user を切り替える
+            if post.user == user:
+                target_user = post.match_user  # 投稿者が現在のユーザーなら相手を取得
+            else:
+                target_user = post.user  # それ以外なら投稿者が対象
+
+            # 二重評価を防ぐため、既存のレビューをチェック
+            if Review.objects.filter(user=user, target_user=target_user, post=post).exists():
+                messages.error(self.request, '既にこの取引に対する評価を登録済みです。')
+                return redirect('GOODstime:interchange_detail', pk=post.pk)
+
+            if review_form.is_valid():
+                review = review_form.save(commit=False)
+                if post.user == user:
+                    review.target_user = post.match_user  # 投稿者が現在のユーザーなら相手を取得
+                else:
+                    review.target_user = post.user  # それ以外なら投稿者が対象
+
+                review.user = user  # 評価をしたのはログイン中のユーザー
+                review.post = post
+                review.save()
+                post.status = 'completed'
+                post.save()
+                messages.success(self.request, '評価を登録しました。')
+                return redirect('GOODstime:interchange_detail', pk=post.pk)
+            else:
+                context = self.get_context_data(**kwargs)
+                context['review_form'] = review_form
+                context['error_message'] = review_form.errors  
                 return self.render_to_response(context)
 
         # 取引キャンセル処理

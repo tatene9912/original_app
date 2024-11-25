@@ -17,13 +17,14 @@ class PostAdmin(admin.ModelAdmin):
         'type_transaction',
         'type_transfer',
         'match_user',
+        'status',
         'thumbnail_image1',
         'thumbnail_image2',
         'thumbnail_image3',
         'created_at',
         'updated_at',
     )
-    search_fields = ('user', 'work_name', 'give_character', 'tag1',)
+    search_fields = ('user', 'work_name', 'give_character', 'tag1','status',)
 
     # サムネイル画像1
     def thumbnail_image1(self, obj):
@@ -73,6 +74,7 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'user',
+        'post',
         'target_user',
         'score',
         'comment',

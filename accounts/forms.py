@@ -5,27 +5,27 @@ class CustomSignupForm(SignupForm):
     name = forms.CharField(
         label="氏名",
         max_length=50,
-        widget=forms.TextInput(attrs={'placeholder': '侍 花子'})
+        widget=forms.TextInput(attrs={'placeholder': '侍 花子', 'cols': '50'})
     )
     nic_name = forms.CharField(
         label="ニックネーム",
         max_length=50,
-        widget=forms.TextInput(attrs={'placeholder': 'サムライ'})
+        widget=forms.TextInput(attrs={'placeholder': 'サムライ', 'cols': '50'})
     )
     postal_code = forms.CharField(
         label="郵便番号",
         max_length=7,
-        widget=forms.TextInput(attrs={'placeholder': '5555555(ハイフンなし)'})
+        widget=forms.TextInput(attrs={'placeholder': '5555555(ハイフンなし)', 'cols': '50'})
     )
     address = forms.CharField(
         label="住所",
         max_length=100,
-        widget=forms.TextInput(attrs={'placeholder': '東京都千代田区霞が関…'})
+        widget=forms.TextInput(attrs={'placeholder': '東京都千代田区霞が関…', 'cols': '50'})
     )
     phone_number = forms.CharField(
         label="電話番号",
         max_length=15,
-        widget=forms.TextInput(attrs={'placeholder': '09011112222(ハイフンなし)'})
+        widget=forms.TextInput(attrs={'placeholder': '09011112222(ハイフンなし)', 'cols': '50'})
     )
 
     def signup(self, request, user):

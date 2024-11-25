@@ -14,7 +14,9 @@
         <!-- 作品名と画像 -->
         <div class="post-header text-center">
             <h1>{{ user.nic_name }}</h1>
+            {% if user.image %}
             <img src="{{ user.image.url }}" class="detail-img" alt="アイコン">
+            {% endif %}
         </div>
     
         <!-- 投稿の詳細情報 -->

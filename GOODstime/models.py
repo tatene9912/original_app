@@ -14,11 +14,12 @@ transfer_CHOICES = [
 STATUS_CHOICES = [
     ('unmatched', '取引未成立'),
     ('matched', '取引成立'),
+    ('completed', '取引完了'),
 ]
 
 class Post(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name='投稿者名',related_name='posts',null=True)
-    work_name = models.CharField(max_length=100, verbose_name='投稿名')
+    work_name = models.CharField(max_length=100, verbose_name='タイトル')
     content = models.TextField(verbose_name='本文')
     tag1 = models.CharField(max_length=50, verbose_name='タグ1')
     tag2 = models.CharField(max_length=50, verbose_name='タグ2', blank=True)
@@ -37,7 +38,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
 
     def __str__(self):
-        return f"{self.user.nic_name} at {self.created_at}"
+        return self.work_name
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='会員名', null=True)
@@ -64,6 +65,7 @@ review_CHOICES = [
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='会員名', null=True, related_name='reviews')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='投稿名', null=True, blank=True)
     target_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='対象会員名', null=True, related_name='target_reviews')
     score = models.PositiveIntegerField(verbose_name='評価',choices=review_CHOICES)
     comment = models.TextField(verbose_name='コメント',blank=True)

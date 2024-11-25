@@ -11,8 +11,27 @@
 {% block contents %}
 <div class="my-div-style">
     <div class="post-detail-container mt-3 mb-4">
+        <div class="comment-section mt-5 text-center">
+            <h3 class="text-center mb-4">相手の評価を登録</h3>
+            {% if has_posted_review %}
+            <p>この取引は既に評価済みです。</p>
+            {% else %}
+            <p>取引完了後にご登録ください</p>
+            <!-- 評価投稿フォーム -->
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'GOODstime:interchange_detail' pk=post.id %}" class="text-center">
+                {% csrf_token %}
+                <div class="form-group d-flex flex-column">
+                    {{ review_form.score }} 
+                    {{ review_form.comment }}  <!-- フィールドのみを表示 -->
+                </div>
+                <button type="submit" name="review_submit" class="btn btn-primary mt-2">評価を投稿する</button>
+            </form>
+            {% endif %}
+            {% endif %}
+        </div>
         <!-- 作品名と画像 -->
-        <div class="post-header">
+        <div class="post-header mt-3">
             <h1 class="text-center">{{ post.work_name }}</h1>
             <p class="nickname text-center">投稿者: <a href="{% url 'GOODstime:user_profile' pk=post.user.pk %}">{{ post.user.nic_name }}</a></p>
     
@@ -62,6 +81,8 @@
             {% endif %}
             
         </div>
+        {% if has_posted_review %}
+        {% else %}
         <form class="text-center mt-4" method="post" action="{% url 'GOODstime:interchange_detail' pk=post.pk %}">
             {% csrf_token %}
             <button type="submit" name="cancel_transaction" class="btn btn-danger"
@@ -69,7 +90,7 @@
                 この取引をキャンセルする
             </button>
         </form>
-    
+        {% endif %}
     </div>
 </div>
 
