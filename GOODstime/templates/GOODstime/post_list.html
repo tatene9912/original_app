@@ -16,7 +16,7 @@
             <!-- 上部の検索・フィルター・並び替えエリア -->
             <div class="form-header">
                 <!-- 検索フォーム -->
-                <form action="{% url 'GOODstime:post_list' %}" method="get" class="search-form">
+                <form action="{% url 'GOODstime:post_list' %}" method="get" class="search-form" id="custom-form">
                     <input type="text" name="q" placeholder="検索キーワードを入力" value="{{ query }}">
                     <button type="submit" class="btn-search">検索</button>
                 </form>

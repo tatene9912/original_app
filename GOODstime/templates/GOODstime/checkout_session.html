@@ -1,0 +1,10 @@
+{% extends 'GOODstime/base.html' %}
+{% load static %}
+{% block title %}プレミアムプラン登録{% endblock %}
+
+{% block contents %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/stripe.js' %}"></script>
+<h1 class="my-div-style">プレミアムプラン登録</h1>
+<button class="btn btn-primary text-white btn-danger" id="checkout">登録</button>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "GOODstime/base.html" %}
+{% load static %}
+
+{% block title %}プレミアムプラン紹介{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="my-div-style">
+    <div class="post-detail-container mt-3 mb-4 text-center">
+        <h1>プレミアムプラン紹介</h1>
+        <p style="text-decoration: rgb(254, 66, 66) wavy underline;">初月無料キャンペーン中！</p>
+        <div class="d-flex justify-content-center">
+            <ul class="list_item">
+                <li>投稿数が1カ月5回⇒<span style="color: red; font-weight: bold; font-size: larger;">無制限</span></li>
+                <li>ユーザーのブロック機能</li>
+                <li>マイナスワード検索機能</li>
+            </ul>
+        </div>
+        {% if not user.is_authenticated %}
+        <a class="btn btn-primary" href="{% url 'account_login' %}">プレミアムプラン登録</a>
+        {% else %}
+        {% if user.stripe_customer %}
+        <p>すでに登録済みです</p>
+        {% else %}
+        <a class="btn btn-primary" href="{% url 'GOODstime:checkout_session' %}">プレミアムプラン登録</a>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

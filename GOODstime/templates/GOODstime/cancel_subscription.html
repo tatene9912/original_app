@@ -1,0 +1,16 @@
+{% extends 'GOODstime/base.html' %}
+{% load static %}
+
+{% block title %}プレミアムプラン解約{% endblock %}
+
+{% block contents %}
+<div class="my-div-style">
+    <div class="confirmation-box">
+        <h1 class="text-center">プレミアムプラン解約</h1>
+        <p>本当に解約しますか？</p><br><br>
+        <a href="{% url 'GOODstime:myPage' %}">戻る</a>
+        <a class="btn btn-danger" href="{% url 'GOODstime:cancel_subscription' %}">解約</a>
+    </div>
+    
+</div>
+{% endblock %}

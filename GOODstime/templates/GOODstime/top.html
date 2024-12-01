@@ -10,8 +10,110 @@
 
 {% block contents %}
 <div class="my-div-style">
-    <a href="{% url 'GOODstime:new' %}">新規作成</a>
-    <a href="{% url 'GOODstime:post_list' %}">投稿一覧</a>
+    <!-- 画像カルーセル -->
+    <div id="postImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active text-center">
+                <img src="{% static 'assets/guide.jpg' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="ご利用ガイド">
+            </div>
+            <div class="carousel-item text-center">
+                <a href="{% url 'GOODstime:subscription' %}"><img src="{% static 'assets/plemium.jpg' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="プレミアムプラン案内"></a>
+            </div>
+        </div>        
+        <button class="carousel-control-prev" type="button" data-bs-target="#postImagesCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#postImagesCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <a href="{% url 'GOODstime:new' %}" class="fixed-button">新規作成</a>
+    <div class="form-header-top">
+        <!-- 検索フォーム -->
+        <form action="{% url 'GOODstime:post_list' %}" method="get" class="search-form-top" id="top-form">
+            <!-- 通常の検索ボックス -->
+            <div class="main-search">
+                <input type="text" name="q" placeholder="検索キーワードを入力" value="{{ query }}">
+                <button type="submit" class="btn-search-top">検索</button>
+                <!-- 三角ボタン -->
+                <button type="button" class="btn-toggle" onclick="toggleAdvancedSearch()">▼</button>
+            </div>
+    
+            <!-- 隠れている検索ボックス -->
+            <div class="advanced-search" id="advanced-search" style="display: none;">
+                <div class="advanced-input">
+                    <label for="give-character">譲渡キャラ名:</label>
+                    <input type="text" name="give_character" id="give-character" placeholder="アリエル" value="{{ request.GET.give_character }}">
+                </div>
+                <div class="advanced-input">
+                    <label for="want-character">希望キャラ名:</label>
+                    <input type="text" name="want_character" id="want-character" placeholder="シンデレラ" value="{{ request.GET.want_character }}">
+                </div>
+            </div>
+        </form>
+    </div>
+    
+
+        <div class="text-center mt-4 mb-4">
+            <img class="text-center" src="{% static 'assets/HotWord.png' %}" />
+        </div>
+
+        <div class="trend-container">
+            <!-- タグ1のグループ -->
+            <div class="trend-tags">
+                {% for tag in tag1_top3 %}
+                <a href="{% url 'GOODstime:tag_search' tag=tag.tag1 %}"><span class="trend-tag">{{ tag.tag1 }}</span></a>
+                {% endfor %}
+            </div>
+        
+            <!-- タグ2のグループ -->
+            <div class="trend-tags">
+                {% for tag in tag2_top3 %}
+                <a href="{% url 'GOODstime:tag_search' tag=tag.tag2 %}"><span class="trend-tag">{{ tag.tag2 }}</span></a>
+                {% endfor %}
+            </div>
+        
+            <!-- タグ3のグループ -->
+            <div class="trend-tags">
+                {% for tag in tag3_top3 %}
+                <a href="{% url 'GOODstime:tag_search' tag=tag.tag3 %}"><span class="trend-tag">{{ tag.tag3 }}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="text-center mt-4 mb-2">
+            <img class="text-center" src="{% static 'assets/NewPost.png' %}" />
+        </div>
+
+        <div class="post-list">
+            {% for post in object_list %}
+            <div class="post-item">
+                <a class="post-link" href="{% url 'GOODstime:post_detail' post.pk %}">
+                    <div class="tags mt-1 ms-1">
+                        {% if post.tag1 %}<span class="tag me-auto">#{{ post.tag1 }}</span>{% endif %}
+                        {% if post.tag2 %}<span class="tag me-auto">#{{ post.tag2 }}</span>{% endif %}
+                        {% if post.tag3 %}<span class="tag me-auto">#{{ post.tag3 }}</span>{% endif %}
+                    </div>
+                    <img src="{{ post.image1.url }}" class="post-image" alt="{{ post.work_name }}">
+                    <h3 class="post-title">{{ post.work_name }}</h3>
+                    <p class="post-description text-limit">{{ post.content|truncatewords:20 }}</p>
+                                <!-- 希望キャラ名または価格 -->
+                    <div class="character-info">
+                        <p><strong>譲：</strong> {{ post.give_character }}</p>
+                        <p><strong>求：</strong>
+                            {% if post.type_transaction == 1 %}
+                                {{ post.want_character }}  <!-- 交換の場合 -->
+                            {% else %}
+                                ¥{{ post.price }}  <!-- 譲渡の場合 -->
+                            {% endif %}
+                        </p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    
 </div>
 
 

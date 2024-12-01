@@ -1,0 +1,33 @@
+{% extends 'GOODstime/base.html' %}
+{% load static %}
+
+{% block title %}カード情報更新{% endblock %}
+
+{% block contents %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/stripe.js' %}"></script>
+
+<div class="my-div-style">
+    <div class="container mt-5">
+        <h1 class="text-center my-4">カード情報更新</h1>
+        <div class="card shadow-sm p-4">
+            <form id="payment-form" method="post">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="card-element" class="form-label">カード情報</label>
+                    <div id="card-element" class="form-control" style="height: 2.4rem;"></div>
+                </div>
+                <input type="hidden" id="StripeSubscriptionId" value="{{ old_payment_method_id }}">
+                <input type="hidden" id="subscriptionId" value="{{ subscription_id }}">
+                <div class="d-flex justify-content-center">
+                    <button id="update-payment-button" type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sync-alt"></i> 更新
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

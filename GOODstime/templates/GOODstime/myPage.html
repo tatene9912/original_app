@@ -3,7 +3,7 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}マイページ{% endblock %}
+{% block title %}MyPage{% endblock %}
 
 {% block header %}
 {% endblock %}
@@ -11,8 +11,19 @@
 {% block contents %}
 <div class="my-div-style">
     <div class="my-div-style3 text-center">
-        <h1>{{ user.nic_name }}さんのマイページ</h1>
+        <img class="text-center" src="{% static 'assets/MyPage.png' %}" />
+        {% if user.image %}
+        <img src="{{ user.image.url }}" class="mypage-image mt-3" alt="アイコン">
+        {% endif %}
+        {% if user.stripe_customer %}
+        <div class="d-flex align-items-center">
+            {{ user.nic_name }}<img src="{% static 'assets/P.png' %}" />
+        </div>
+        {% else %}
+        {{ user.nic_name }}
+        {% endif %}
         <div class="MyPage">
+            {% if user.stripe_customer %}
             <a class="select mb-4" href="{% url 'GOODstime:edit_profile' %}">プロフィールの編集</a>
             <a class="select mb-4" href="{% url 'GOODstime:profile_detail' %}">プロフィールの表示</a>
             <a class="select mb-4" href="{% url 'GOODstime:favorites_list' %}">お気に入り一覧</a>
@@ -20,7 +31,19 @@
             <a class="select mb-4" href="{% url 'GOODstime:requested_post_list' %}">リクエスト一覧</a>
             <a class="select mb-4" href="{% url 'GOODstime:own_interchange_list' %}">取引中一覧</a>
             <a class="select mb-4" href="{% url 'account_reset_password' %}">パスワードの変更</a>
+            <a class="select mb-4" href="{% url 'GOODstime:update_payment_method' %}">カード情報更新</a>
+            <a class="select mb-4" href="{% url 'GOODstime:cancelSubscription' %}">プレミアムプラン解約</a>
+            {% else %}
+            <a class="select mb-4" href="{% url 'GOODstime:edit_profile' %}">プロフィールの編集</a>
+            <a class="select mb-4" href="{% url 'GOODstime:profile_detail' %}">プロフィールの表示</a>
+            <a class="select mb-4" href="{% url 'GOODstime:favorites_list' %}">お気に入り一覧</a>
+            <a class="select mb-4" href="{% url 'GOODstime:my_post_list' %}">投稿一覧</a>
+            <a class="select mb-4" href="{% url 'GOODstime:requested_post_list' %}">リクエスト一覧</a>
+            <a class="select mb-4" href="{% url 'GOODstime:own_interchange_list' %}">取引中一覧</a>
+            <a class="select mb-4" href="{% url 'account_reset_password' %}">パスワードの変更</a>
+            {% endif %}
         </div>
+        <a href="{% url 'GOODstime:user_delete' pk=request.user.pk %}" class="text-secondary text-center mb-3">退会する</a>
     </div>
 </div>
 

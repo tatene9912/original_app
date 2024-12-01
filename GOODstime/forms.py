@@ -1,5 +1,5 @@
 from django import forms
-from GOODstime.models import Comment, Favorite, Post, Message, Review
+from GOODstime.models import Comment, Favorite, Post, Message, Report, Review
 from accounts.models import User
 
 class PostForm(forms.ModelForm):
@@ -74,9 +74,25 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['score', 'comment']
         widgets = {
-            'comment': forms.Textarea(attrs={'cols': '10', 'rows': 3, 'placeholder': 'お礼のコメントを書くと喜ばれます'}),
+            'comment': forms.Textarea(attrs={'cols': '100', 'rows': 3, 'placeholder': 'お礼のコメントを書くと喜ばれます'}),
         }
         labels = {
             'comment': '',  # ラベルを非表示にする
             'score': '',  # ラベルを非表示にする
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # formにCSSをあてる
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={'cols': '100', 'rows': 3, 'placeholder': '通報内容を記載してください'}),
+        }
+        labels = {
+            'comment': '',  # ラベルを非表示にする
         }

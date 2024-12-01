@@ -21,6 +21,7 @@ class PostAdmin(admin.ModelAdmin):
         'thumbnail_image1',
         'thumbnail_image2',
         'thumbnail_image3',
+        'delete_flg',
         'created_at',
         'updated_at',
     )
@@ -98,7 +99,6 @@ class ReportAdmin(admin.ModelAdmin):
         'user',
         'post',
         'comment',
-        'delete_flg',
         'created_at',
         'updated_at',
     )

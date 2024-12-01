@@ -34,6 +34,7 @@ class Post(models.Model):
     image1 = models.ImageField(verbose_name='画像1')
     image2 = models.ImageField(verbose_name='画像2', blank=True)
     image3 = models.ImageField(verbose_name='画像3', blank=True)
+    delete_flg = models.BooleanField(verbose_name='削除フラグ', default=False, null=True, blank=True)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
 
@@ -87,12 +88,11 @@ class Report(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='会員名', null=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='投稿名', null=True)
     comment = models.TextField(verbose_name='内容',blank=True)
-    delete_flg = models.BooleanField(verbose_name='削除フラグ', default=False)
     created_at = models.DateTimeField(verbose_name='作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='更新日時', auto_now=True)
 
     def __str__(self):
-        return f"{self.user.nic_name} at {self.post.user.nic_name}"
+        return f"at {self.post.user.nic_name}"
     
 class Block(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='会員名', null=True, related_name='reports')

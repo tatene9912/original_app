@@ -17,6 +17,7 @@
             {% if user.image %}
             <img src="{{ user.image.url }}" class="detail-img" alt="アイコン">
             {% endif %}
+            <a href="{% url 'GOODstime:review_list' user_pk=profile.pk %}">Good({{ good_score }})/Bad({{ bad_score }})</a>
         </div>
     
         <!-- 投稿の詳細情報 -->

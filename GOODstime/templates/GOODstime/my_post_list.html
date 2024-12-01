@@ -20,6 +20,7 @@
                 <!-- 削除フォーム -->
                 <form method="post" action="{% url 'GOODstime:my_post_list' %}">
                     {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
                     <button type="submit" name="delete_post" class="btn btn-danger ms-1" 
                             onclick="return confirm('本当に投稿を削除しますか？');">
                         削除

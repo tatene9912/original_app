@@ -27,6 +27,11 @@ class CustomSignupForm(SignupForm):
         max_length=15,
         widget=forms.TextInput(attrs={'placeholder': '09011112222(ハイフンなし)', 'cols': '50'})
     )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # formにCSSをあてる
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
     def signup(self, request, user):
         """新規登録時に追加データを保存"""

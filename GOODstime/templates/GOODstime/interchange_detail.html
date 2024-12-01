@@ -19,14 +19,20 @@
             <p>取引完了後にご登録ください</p>
             <!-- 評価投稿フォーム -->
             {% if user.is_authenticated %}
-            <form method="post" action="{% url 'GOODstime:interchange_detail' pk=post.id %}" class="text-center">
-                {% csrf_token %}
-                <div class="form-group d-flex flex-column">
-                    {{ review_form.score }} 
-                    {{ review_form.comment }}  <!-- フィールドのみを表示 -->
-                </div>
-                <button type="submit" name="review_submit" class="btn btn-primary mt-2">評価を投稿する</button>
-            </form>
+            <div class="text-center">
+                <form method="post" action="{% url 'GOODstime:interchange_detail' pk=post.id %}" class="text-center">
+                    {% csrf_token %}
+                    <div class="form-group d-flex flex-column justify-content-center">
+                        <div class="mb-3">
+                            {{ review_form.score }}  <!-- score フィールド -->
+                        </div>
+                        <div class="mb-3">
+                            {{ review_form.comment }}  <!-- comment フィールド -->
+                        </div>
+                    </div>
+                    <button type="submit" name="review_submit" class="btn btn-primary mt-2">評価を投稿する</button>
+                </form>
+            </div>            
             {% endif %}
             {% endif %}
         </div>

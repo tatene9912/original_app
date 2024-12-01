@@ -156,6 +156,12 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media_local'
 
+# STRIPE 追加
+STRIPE_PUBLIC_KEY = 'pk_test_51QQpytG27ISRyatsGtEoVRSRLeOY9J7wKocwzxBOoLN92HcfPlpzjzbzjrkU8Pa8L1Ij0C6o7wUSP1V6iaqAhNYB0050UGqgCK'
+STRIPE_SECRET_KEY = 'sk_test_51QQpytG27ISRyatsxjpbObzWHK4L0TFum3JXWMn86MGcp51rXONLLyUe5zk7XIdoY5RmwxSeAA6xfEHHyrBhqBmA00Yy5vH6tL'
+STRIPE_PRICE_ID = 'price_1QQq0cG27ISRyats2Vi2Lcoj'
+STRIPE_ENDPOINT_SECRET = 'whsec_0bf5867227aa5f2de76f81e7b29a76ae784018a2e2b89f332f8cca70c2429378'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
