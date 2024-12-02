@@ -27,6 +27,7 @@ urlpatterns = [
     path('review_list/<int:user_pk>/', views.ReviewListView.as_view(), name='review_list'),
     path('user_delete/<int:pk>', views.UserDeleteView.as_view(), name='user_delete'),
     path('legal/', views.LegalView.as_view(), name='legal'),
+    path('guideline/', views.GuidelineView.as_view(), name='guideline'),
     path('config/', views.stripe_config),
     path('create_checkout_session/', views.create_checkout_session, name='checkout_session'),
     path('success/', views.success),
@@ -37,4 +38,5 @@ urlpatterns = [
     path('cancel_subscription/', views.CancelSubscriptionView.as_view(), name='cancelSubscription'),
     path('update_payment_method/', views.update_payment_method, name='update_payment_method'),
     path('update_payment_method_success/', views.PaymentUpdateSuccessView.as_view(), name='update_payment_method_success'),
+    path('Inquiry/', views.InquiryCreateView.as_view(), name='Inquiry'),
 ]

@@ -6,11 +6,11 @@ from django.template import engines
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import CreateView, ListView, DetailView, TemplateView, UpdateView, DeleteView
-from GOODstime.models import Block, Favorite, Post, Report, Review, Stripe_Customer
+from GOODstime.models import Block, Favorite, Inquiry, Post, Report, Review, Stripe_Customer
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from accounts.models import User
-from .forms import CommentForm, FavoriteForm, MessageForm, PostForm, ProfileForm, ReportForm, ReviewForm
+from .forms import CommentForm, FavoriteForm, InquiryForm, MessageForm, PostForm, ProfileForm, ReportForm, ReviewForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -181,7 +181,6 @@ class PostListView(ListView):
         if q := query.get('q'):
             queryset = queryset.filter(
                 Q(work_name__icontains=q) |
-                Q(content__icontains=q) |
                 Q(tag1__icontains=q) |
                 Q(tag2__icontains=q) |
                 Q(tag3__icontains=q) |
@@ -196,6 +195,17 @@ class PostListView(ListView):
         # 希望キャラ名の検索
         if want_query := query.get('want_character'):
             queryset = queryset.filter(want_character__icontains=want_query)
+
+        # マイナスワード検索
+        if minus_query := query.get('minus_word'):
+            queryset = queryset.exclude(
+                Q(work_name__icontains=minus_query) |
+                Q(tag1__icontains=minus_query) |
+                Q(tag2__icontains=minus_query) |
+                Q(tag3__icontains=minus_query) |
+                Q(give_character__icontains=minus_query) |
+                Q(want_character__icontains=minus_query) 
+            )
 
         # フィルターの処理（取引未成立の投稿のみ）
         filter_status = self.request.GET.get('filter_status')
@@ -728,6 +738,9 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
 class LegalView(TemplateView):
     template_name = 'GOODstime/legal.html'
 
+class GuidelineView(TemplateView):
+    template_name = 'GOODstime/guideline.html'
+
 class SubscriptionView(TemplateView):
     template_name = 'GOODstime/subscription.html'
 
@@ -744,6 +757,7 @@ def create_checkout_session(request):
     if request.method == 'GET':
         domain_url = 'http://localhost:8000/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
+        coupon_id = "SWekga3A"
         
         # ユーザーが認証されているか確認
         if request.user.is_authenticated:
@@ -764,7 +778,10 @@ def create_checkout_session(request):
                             'price': settings.STRIPE_PRICE_ID,
                             'quantity': 1,
                         }
-                    ]
+                    ],
+                    discounts=[
+                        {"coupon": coupon_id},  # クーポンを適用
+                    ],
                 )
                 return redirect(checkout_session.url)
             except Exception as e:
@@ -784,27 +801,19 @@ def checkout_success_webhook(request):
             payload, sig_header, endpoint_secret
         )
     except ValueError as e:
-        print("Invalid payload:", e)
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
-        print("Invalid signature:", e)
         return HttpResponse(status=400)
-
-    # デバッグ出力
-    print("Received event:", event)
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        print("Checkout session completed:", session)
 
         # 顧客情報を確認
         customer_id = session['customer']
-        print("Customer ID:", customer_id)  # デバッグ出力
 
         # 顧客情報をStripeから取得
         customer = stripe.Customer.retrieve(customer_id)
         email = customer['email']
-        print("Email:", email)  # デバッグ出力
 
         # 支払い方法を取得するためのAPI呼び出し
         payment_methods = stripe.PaymentMethod.list(
@@ -814,9 +823,7 @@ def checkout_success_webhook(request):
         
         if payment_methods.data:
             payment_method_id = payment_methods.data[0].id  # 最初の支払い方法を取得
-            print("Payment Method ID:", payment_method_id)  # デバッグ出力
         else:
-            print("No payment methods found.")
             payment_method_id = None
 
         try:
@@ -837,15 +844,12 @@ def checkout_success_webhook(request):
                 stripe_customer.stripePaymentMethodId = payment_method_id  # 支払い方法IDを更新
                 stripe_customer.save()
 
-            print(f"Stripe Customer {'created' if created else 'updated'} for user: {user}")
-
         except User.DoesNotExist:
             print(f"User with email {email} does not exist.")
         except Exception as e:
             print(f"Error in fulfilling order: {str(e)}")
 
     elif event['type'] == 'invoice.payment_succeeded':
-        # ここにinvoice.payment_succeededの処理を追加できます
         pass
 
     return HttpResponse(status=200)
@@ -869,9 +873,6 @@ def update_payment_method(request):
             payment_method_id = data.get('payment_method_id')
             subscription_id = data.get('subscription_id')
 
-            print('payment_method_id:', payment_method_id)
-            print('subscription_id:', subscription_id)
-
             if not payment_method_id:
                 return JsonResponse({'status': 'error', 'message': 'Payment method ID is missing'})
 
@@ -880,17 +881,14 @@ def update_payment_method(request):
             # サブスクリプションから古い支払い方法を取得
             subscription = stripe.Subscription.retrieve(subscription_id)
             old_payment_method_id = subscription.default_payment_method
-            print('old_payment_method_id:', old_payment_method_id)
 
             if old_payment_method_id:
                 # 古い支払い方法のデタッチ
                 stripe.PaymentMethod.detach(old_payment_method_id)
-                print('古い支払い方法がデタッチされました')
 
             # 新しいカード情報を顧客にアタッチ
             customer = subscription.customer
             stripe.PaymentMethod.attach(payment_method_id, customer=customer)
-            print('新しい支払い方法がアタッチされました')
 
             # デフォルトの支払い方法を更新
             stripe.Customer.modify(
@@ -899,7 +897,6 @@ def update_payment_method(request):
                     'default_payment_method': payment_method_id,
                 },
             )
-            print('デフォルトの支払い方法が更新されました')
 
             # Stripe_Customerを取得し、支払い方法IDを更新
             stripe_customer = Stripe_Customer.objects.get(user=request.user)
@@ -949,22 +946,31 @@ def cancel_subscription(request):
 
             # Stripe APIを使ってサブスクリプションをキャンセル
             stripe.Subscription.delete(subscription_id)
-            print(f"Subscription {subscription_id} canceled successfully.")
 
             # Stripe_Customerレコードを削除
             stripe_customer.delete()
-            print(f"Stripe_Customer record for user {request.user} deleted successfully.")
 
             return render(request, 'GOODstime/cancel_success.html')  # 解約成功ページにリダイレクト
 
         except stripe.error.StripeError as e:
             # Stripe APIでのエラー処理
-            print(f"Error in canceling subscription: {e}")
             return redirect('error_page')  # エラーページにリダイレクト
 
         except Exception as e:
             # その他のエラー処理
-            print(f"Unexpected error: {e}")
             return redirect('error_page')  # エラーページにリダイレクト
     else:
         return redirect('login')  # 認証されていない場合はログインページへ
+
+class InquiryCreateView(CreateView):
+    template_name = 'GOODstime/inquiry.html'
+    model = Inquiry
+    form_class = InquiryForm
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.save()
+        messages.success(self.request, 'お問い合わせありがとうございます。')
+        return super().form_valid(form)
+
+    success_url = reverse_lazy('GOODstime:top')

@@ -161,12 +161,13 @@
             {% else %}
             {% endif %}
         </div>
+        {% if user.is_authenticated %}
         {% if post.user != request.user %}
         <div class="text-center mt-3">
             <a href="{% url 'GOODstime:post_report' post.id %}" class="btn btn-danger">通報する</a>
         </div>
         {% endif %}
-    
+        {% endif %}
     </div>
 </div>
 

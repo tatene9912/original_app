@@ -14,7 +14,7 @@
     <div id="postImagesCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active text-center">
-                <img src="{% static 'assets/guide.jpg' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="ご利用ガイド">
+                <a href="{% url 'GOODstime:guideline' %}"><img src="{% static 'assets/guide.jpg' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="ご利用ガイド"></a>
             </div>
             <div class="carousel-item text-center">
                 <a href="{% url 'GOODstime:subscription' %}"><img src="{% static 'assets/plemium.jpg' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="プレミアムプラン案内"></a>
@@ -29,7 +29,9 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+    {% if user.is_authenticated %}
     <a href="{% url 'GOODstime:new' %}" class="fixed-button">新規作成</a>
+    {% endif %}
     <div class="form-header-top">
         <!-- 検索フォーム -->
         <form action="{% url 'GOODstime:post_list' %}" method="get" class="search-form-top" id="top-form">
@@ -51,6 +53,12 @@
                     <label for="want-character">希望キャラ名:</label>
                     <input type="text" name="want_character" id="want-character" placeholder="シンデレラ" value="{{ request.GET.want_character }}">
                 </div>
+                {% if user.stripe_customer %}
+                <div class="advanced-input">
+                    <label for="minus_word">除外検索:</label>
+                    <input type="text" name="minus_word" id="minus_word" placeholder="除外したいワードを入れてください" value="{{ request.GET.minus_word }}">
+                </div>
+                {% endif %}
             </div>
         </form>
     </div>

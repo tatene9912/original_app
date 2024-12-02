@@ -7,14 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p8iu-5-=*3=xe+h8l3tcy86xfyga*xtkzr756t$5u$0+b@9#$d'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+DEBUG = False
 
 # Application definition
 import os
@@ -35,10 +29,12 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'import_export', 
     'django.contrib.humanize',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -94,7 +90,13 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'  # emailで認証する
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True  # パスワード確認フィールドを使用する場合
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # メール検証を必須とする
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 't.atene0l4o1v2e@gmail.com'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER # send_mailのfromがNoneの場合自動で入る。
+EMAIL_HOST_PASSWORD = ''
 
 ACCOUNT_LOGOUT_ON_GET = True
 
@@ -154,7 +156,10 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media_local'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+ALLOWED_HOSTS = ['127.0.0.1' ,'herokuapp.com']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # STRIPE 追加
 STRIPE_PUBLIC_KEY = 'pk_test_51QQpytG27ISRyatsGtEoVRSRLeOY9J7wKocwzxBOoLN92HcfPlpzjzbzjrkU8Pa8L1Ij0C6o7wUSP1V6iaqAhNYB0050UGqgCK'
@@ -166,6 +171,12 @@ STRIPE_ENDPOINT_SECRET = 'whsec_0bf5867227aa5f2de76f81e7b29a76ae784018a2e2b89f33
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLOUDINARY_STORAGE  = {
+    'CLOUD_NAME':'hoep8dpt4',
+    'API_KEY': '785511999933492',
+    'API_SECRET': 'GTHDFdFWcQn2yhINFQWJmou-wgE'
+}
 
 LOGGING = {
     "version": 1,

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Admin_user, Post,Comment, Message, Review, Report, Favorite, Block, Stripe_Customer
+from .models import Admin_user, Post,Comment, Message, Review, Report, Favorite, Block, Stripe_Customer, Inquiry
 from django.utils.safestring import mark_safe
 
 class PostAdmin(admin.ModelAdmin):
@@ -122,6 +122,10 @@ class Admin_userAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'email', 'created_date', 'updated_date')
     search_fields = ('name', )
 
+class InquiryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'email', 'content',)
+    search_fields = ('name', 'email')
+
 admin.site.register(Post,PostAdmin)
 admin.site.register(Comment,CommentAdmin)
 admin.site.register(Message,MessageAdmin)
@@ -131,3 +135,4 @@ admin.site.register(Report,ReportAdmin)
 admin.site.register(Block,BlockAdmin)
 admin.site.register(Stripe_Customer, Stripe_CustomerAdmin)
 admin.site.register(Admin_user, Admin_userAdmin)
+admin.site.register(Inquiry, InquiryAdmin)

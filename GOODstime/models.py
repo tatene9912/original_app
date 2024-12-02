@@ -123,3 +123,11 @@ class Admin_user(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Inquiry(models.Model):
+    name = models.CharField(max_length=30, verbose_name='お名前')
+    email = models.EmailField(verbose_name='メールアドレス')
+    content = models.TextField(verbose_name='お問い合わせ内容')
+
+    def __str__(self):
+        return self.name

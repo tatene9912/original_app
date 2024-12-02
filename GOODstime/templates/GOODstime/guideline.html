@@ -1,0 +1,24 @@
+{% extends "GOODstime/base.html" %}
+{% load static %}
+
+{% block title %}ご利用ガイド{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="my-div-style">
+    <div class="post-detail-container mt-3 mb-4 text-center">
+        <h1>ご利用ガイド</h1>
+        <img src="{% static 'assets/1.png' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="撮影＆投稿">
+        <p class="mt-3 mb-4">交換や譲渡したいお手持ちのグッズを撮影し、投稿を作成します。</p>
+        <img src="{% static 'assets/2.png' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="マッチング">
+        <p class="mt-3 mb-4">他のユーザーからのリクエストを承認し、取引を成立させます。</p>
+        <img src="{% static 'assets/3.png' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="交換成立">
+        <p class="mt-3 mb-4">個別メッセージでやり取りをして交換や譲渡をします。</p>
+        <img src="{% static 'assets/4.png' %}" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="いいね">
+        <p class="mt-3 mb-4">気になる投稿にはお気に入り登録をしたりコメントを送りましょう！</p>
+    </div>
+</div>
+
+{% endblock %}

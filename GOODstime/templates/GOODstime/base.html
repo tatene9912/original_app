@@ -70,7 +70,11 @@
 
         <!-- Footer-->
         <footer class="py-5 bg-dark text-center">
-            <a class="text-light mb-3" href="{% url 'GOODstime:legal' %}">利用規約</a>
+            <div class="d-flex flex-column">
+                <a class="text-white" href="{% url 'GOODstime:legal' %}">利用規約</a>
+                <a class="text-white" href="{% url 'GOODstime:guideline' %}">ご利用ガイド</a>
+                <a class="text-white" href="{% url 'GOODstime:Inquiry' %}">お問い合わせ</a>
+            </div>
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Have a GOODs Time 2024</p></div>
         </footer>
         <!-- Bootstrap core JS-->
