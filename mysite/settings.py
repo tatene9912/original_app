@@ -162,7 +162,7 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-ALLOWED_HOSTS = ['127.0.0.1' ,'herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1' ,'have-a-goods-time-3aa521ed0391.herokuapp.com']
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # STRIPE 追加
