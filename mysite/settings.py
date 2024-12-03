@@ -160,8 +160,7 @@ MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 ALLOWED_HOSTS = ['127.0.0.1' ,'herokuapp.com']
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # STRIPE 追加
 STRIPE_PUBLIC_KEY = 'pk_test_51QQpytG27ISRyatsGtEoVRSRLeOY9J7wKocwzxBOoLN92HcfPlpzjzbzjrkU8Pa8L1Ij0C6o7wUSP1V6iaqAhNYB0050UGqgCK'
