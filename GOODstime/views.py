@@ -755,7 +755,7 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'http://localhost:8000/'
+        domain_url = 'https://have-a-goods-time-3aa521ed0391.herokuapp.com/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         coupon_id = "SWekga3A"
         

@@ -101,7 +101,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 't.atene0l4o1v2e@gmail.com'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER # send_mailのfromがNoneの場合自動で入る。
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'wcly ixsc qqwb cfko'
 
 ACCOUNT_LOGOUT_ON_GET = True
 
@@ -160,16 +160,17 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_URL = '/media/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-ALLOWED_HOSTS = ['127.0.0.1' ,'have-a-goods-time-3aa521ed0391.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1' ,'have-a-goods-time-3aa521ed0391.herokuapp.com','herokuapp.com']
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # STRIPE 追加
 STRIPE_PUBLIC_KEY = 'pk_test_51QQpytG27ISRyatsGtEoVRSRLeOY9J7wKocwzxBOoLN92HcfPlpzjzbzjrkU8Pa8L1Ij0C6o7wUSP1V6iaqAhNYB0050UGqgCK'
 STRIPE_SECRET_KEY = 'sk_test_51QQpytG27ISRyatsxjpbObzWHK4L0TFum3JXWMn86MGcp51rXONLLyUe5zk7XIdoY5RmwxSeAA6xfEHHyrBhqBmA00Yy5vH6tL'
 STRIPE_PRICE_ID = 'price_1QQq0cG27ISRyats2Vi2Lcoj'
-STRIPE_ENDPOINT_SECRET = 'whsec_0bf5867227aa5f2de76f81e7b29a76ae784018a2e2b89f332f8cca70c2429378'
+STRIPE_ENDPOINT_SECRET = 'whsec_E6Pub3w9Y0Rtaq20y5Q9U2xLIk5wJOnM'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -177,9 +178,9 @@ STRIPE_ENDPOINT_SECRET = 'whsec_0bf5867227aa5f2de76f81e7b29a76ae784018a2e2b89f33
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CLOUDINARY_STORAGE  = {
-    'CLOUD_NAME':'hoep8dpt4',
-    'API_KEY': '785511999933492',
-    'API_SECRET': 'GTHDFdFWcQn2yhINFQWJmou-wgE'
+    'CLOUD_NAME':'hb2llzthb',
+    'API_KEY': '599522264637811',
+    'API_SECRET': 'BnciaZUTflv3HOty2BIKGdUouYM'
 }
 
 LOGGING = {

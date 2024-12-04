@@ -3,6 +3,7 @@ from django.contrib.auth.models import (BaseUserManager,
                                         AbstractBaseUser,
                                         PermissionsMixin)
 from django.utils.translation import gettext_lazy as _
+from cloudinary.models import CloudinaryField
 
 
 class UserManager(BaseUserManager):
@@ -49,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=False
     )
-    image = models.ImageField(
+    image = CloudinaryField(
         verbose_name='アイコン',
         null=True,
         blank=True,
