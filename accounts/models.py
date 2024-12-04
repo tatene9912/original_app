@@ -54,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name='アイコン',
         null=True,
         blank=True,
-        default='noImage.png'
+        default='noImage_hr5mpd'
     )
     name = models.CharField(
         verbose_name=_("氏名"),
