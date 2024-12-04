@@ -30,7 +30,7 @@
             <p class="description">まだ自己紹介はありません。</p>
             {% endif %}
         </div>
-        {% if request.user != profile %}
+        {% if request.user != profile_user %}
         {% if user.stripe_customer %}
         {% if is_blocked %}
             <form method="post" class="text-center">
