@@ -1,3 +1,9 @@
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+
 ご登録ありがとうございます！
 登録を続けるには以下のリンクをクリックしてください。
 {{ activate_url }}
+
+{{ site_name }} をご利用いただきありがとうございます！
+{{ site_domain }}
+{% endblocktrans %}
