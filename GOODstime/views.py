@@ -963,7 +963,7 @@ def cancel_subscription(request):
         return redirect('login')  # 認証されていない場合はログインページへ
 
 class InquiryCreateView(CreateView):
-    template_name = 'GOODstime/inquiry.html'
+    template_name = 'GOODstime/Inquiry.html'
     model = Inquiry
     form_class = InquiryForm
 
