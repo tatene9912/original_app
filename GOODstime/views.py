@@ -170,12 +170,13 @@ class PostListView(ListView):
         queryset = super().get_queryset(**kwargs)
         query = self.request.GET
 
-        # 現在のユーザー
-        user = self.request.user
+        if user.is_authenticated:
+            # 現在のユーザー
+            user = self.request.user
 
-        # 現在のユーザーがブロックしているユーザーを除外
-        blocked_users = Block.objects.filter(user=user).values_list('target_user', flat=True)
-        queryset = queryset.exclude(user__in=blocked_users)
+            # 現在のユーザーがブロックしているユーザーを除外
+            blocked_users = Block.objects.filter(user=user).values_list('target_user', flat=True)
+            queryset = queryset.exclude(user__in=blocked_users)
 
         # 検索条件の処理
         if q := query.get('q'):
