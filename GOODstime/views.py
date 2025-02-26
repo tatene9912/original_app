@@ -170,11 +170,9 @@ class PostListView(ListView):
         queryset = super().get_queryset(**kwargs)
         query = self.request.GET
 
-        if user.is_authenticated:
-            # 現在のユーザー
+        # ユーザーがログインしている場合のみブロックユーザーを除外
+        if self.request.user.is_authenticated:
             user = self.request.user
-
-            # 現在のユーザーがブロックしているユーザーを除外
             blocked_users = Block.objects.filter(user=user).values_list('target_user', flat=True)
             queryset = queryset.exclude(user__in=blocked_users)
 
