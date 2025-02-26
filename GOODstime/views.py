@@ -3,7 +3,7 @@ from django.utils import timezone
 import json
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import engines
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic import CreateView, ListView, DetailView, TemplateView, UpdateView, DeleteView
 from GOODstime.models import Block, Favorite, Inquiry, Post, Report, Review, Stripe_Customer
@@ -278,7 +278,7 @@ class PostDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+            return redirect(f"{reverse('account_login')}?next={request.path}")
 
         post_id = self.kwargs['pk']
         user = request.user
