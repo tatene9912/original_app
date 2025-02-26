@@ -277,6 +277,9 @@ class PostDetailView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f"{settings.LOGIN_URL}?next={request.path}")
+
         post_id = self.kwargs['pk']
         user = request.user
 
